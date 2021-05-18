@@ -32,32 +32,12 @@ public class Movement : MonoBehaviour
         // Apply The Force To the Rocket if the SPACE Key Is Pressed
         if (Input.GetKey(KeyCode.Space))
         {
-            _rigidbody.AddRelativeForce(Time.deltaTime * _thrustPower * Vector3.up);
-            // Play rocket booster sound effect only if its not already playing
-            if (!_audioSource.isPlaying)
-            {
-                _audioSource.PlayOneShot(_thrusterAudioClip);
-            }
-            //Play some rocket booster particles only if they arent already playing
-            foreach (var particle in _rocketBoosterParticleSystems)
-            {
-                if (!particle.isPlaying)
-                {
-                    particle.Play();
-                }
-            }
+            StartThrusting();
         }
         else
         {
-            // Stop the rocket booster sound effect if we are not pressing the SPACE Key
-            _audioSource.Stop();
-            // Stop the rocker booster particle if we are not pressing the SPACE Key
-            foreach (var particle in _rocketBoosterParticleSystems)
-            {
-                particle.Stop();
-            }
+            StopThrusting();
         }
-
     }
 
     private void ProcessRotation()
@@ -85,6 +65,36 @@ public class Movement : MonoBehaviour
         
         //Unfreezing rotation so the physics system can take over and handle collision
         _rigidbody.freezeRotation = false;
+    }
+
+    private void StartThrusting()
+    {
+        // Apply Force
+        _rigidbody.AddRelativeForce(Time.deltaTime * _thrustPower * Vector3.up);
+        // Play rocket booster sound effect only if its not already playing
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.PlayOneShot(_thrusterAudioClip);
+        }
+        //Play some rocket booster particles only if they arent already playing
+        foreach (var particle in _rocketBoosterParticleSystems)
+        {
+            if (!particle.isPlaying)
+            {
+                particle.Play();
+            }
+        }
+    }
+
+    private void StopThrusting()
+    {
+        // Stop the rocket booster sound effect if we are not pressing the SPACE Key
+        _audioSource.Stop();
+        // Stop the rocker booster particle if we are not pressing the SPACE Key
+        foreach (var particle in _rocketBoosterParticleSystems)
+        {
+            particle.Stop();
+        }
     }
     
 }
