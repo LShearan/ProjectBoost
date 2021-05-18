@@ -3,35 +3,82 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    private AudioSource _audioSource;
+    private Movement _movement;
 
+    private bool isTransitioning = false;
+    
+    [SerializeField] private float _delayOnCrash = 1f;
+    [SerializeField] private float _delayOnFinish = 1f;
+    [SerializeField] private AudioClip _deathAudioClip;
+    [SerializeField] private AudioClip _successAudioClip;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        _movement = GetComponent<Movement>();
+    }
+    
     private void OnCollisionEnter(Collision other)
     {
+        // If we are currently transition dont process any other collisions
+        if (isTransitioning) { return; }
+
         switch (other.gameObject.tag)
         {
             case "Friendly":
             {
-                Debug.Log("Collided With Friendly Object");
                 break;
             }
             case "Finish":
             {
-                LoadNextScene();
-                break;
-            }
-            case "Fuel":
-            {
-                Debug.Log("Collided With Fuel Object");
+                StartFinishSequence(_delayOnFinish);
                 break;
             }
             default:
             {
-                // When rocket hits obstacles (anything that isn't specified above) we reload the current level
-                ReloadCurrentScene();
+                // When rocket hits an obstacles (anything that isn't specified above) we reload the current level
+                StartCrashSequence(_delayOnCrash);
                 break;
             }
         }
     }
 
+    private void StartCrashSequence(float delayAmount)
+    {
+        // Set isTransitioning to false so that when we crash we dont do anything else
+        isTransitioning = true;
+        
+        // Play Death Sound Effect
+        _audioSource.Stop();
+        _audioSource.PlayOneShot(_deathAudioClip);
+        
+        // todo add particle effect on crash
+
+        // Disable movement component when we crash
+        _movement.enabled = false;
+        
+        // Reload the Scene
+        // Added a delay so less jarring when dying
+        Invoke("ReloadCurrentScene", delayAmount);
+    }
+
+    private void StartFinishSequence(float delayAmount)
+    {
+        // Set isTransitioning to false so that when we succeed we dont do anything else
+        isTransitioning = true;
+
+        // Play Success Sound Effect
+        _audioSource.Stop();
+        _audioSource.PlayOneShot(_successAudioClip);
+        
+        // Disable movement component when we reach the end of the level
+        _movement.enabled = false;
+        
+        // Load the next level with a delay
+        Invoke("LoadNextScene", delayAmount);
+    }
+    
     private void ReloadCurrentScene()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -48,13 +95,5 @@ public class CollisionHandler : MonoBehaviour
 
         }
         SceneManager.LoadScene(nextSceneIndex);
-    }
-    private void LoadScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(sceneIndex);
-    }
-    private void LoadScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
     }
 }

@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField] private float _thrustPower = 100f;
     [SerializeField] private float _rotationRate = 100f;
+    [SerializeField] private AudioClip _thrusterAudioClip;
     
     // Start is called before the first frame update
     private void Start()
@@ -34,7 +35,7 @@ public class Movement : MonoBehaviour
             // Play rocket booster sound effect only if its not already playing
             if (!_audioSource.isPlaying)
             {
-                _audioSource.Play();
+                _audioSource.PlayOneShot(_thrusterAudioClip);
             }
         }
         else
