@@ -7,6 +7,7 @@ public class CollisionHandler : MonoBehaviour
     private Movement _movement;
 
     private bool _isTransitioning = false;
+    private bool _isCollisionEnable = true;
     
     [SerializeField] private float _delayOnCrash = 1f;
     [SerializeField] private float _delayOnFinish = 1f;
@@ -20,11 +21,17 @@ public class CollisionHandler : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _movement = GetComponent<Movement>();
     }
+
+    private void Update()
+    {
+        RespondToDebugKeys();
+    }
     
     private void OnCollisionEnter(Collision other)
     {
         // If we are currently transition dont process any other collisions
-        if (_isTransitioning) { return; }
+        // Or we have toggle collision off should only be used for testing and debugging
+        if (_isTransitioning || !_isCollisionEnable) { return; }
 
         switch (other.gameObject.tag)
         {
@@ -101,5 +108,19 @@ public class CollisionHandler : MonoBehaviour
 
         }
         SceneManager.LoadScene(nextSceneIndex);
+    }
+
+    private void RespondToDebugKeys()
+    {
+        // Load the next level when the user presses L should only be used for testing and debugging
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextScene();
+        }
+        // Toggle collision of the rocket should only be used for testing and debugging
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            _isCollisionEnable = !_isCollisionEnable; // Toggle collision on and off
+        }
     }
 }
