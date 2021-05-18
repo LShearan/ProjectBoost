@@ -5,6 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     private Rigidbody _rigidbody;
+    private AudioSource _audioSource;
 
     [SerializeField] private float _thrustPower = 100f;
     [SerializeField] private float _rotationRate = 100f;
@@ -13,6 +14,7 @@ public class Movement : MonoBehaviour
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -29,6 +31,16 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             _rigidbody.AddRelativeForce(Time.deltaTime * _thrustPower * Vector3.up);
+            // Play rocket booster sound effect only if its not already playing
+            if (!_audioSource.isPlaying)
+            {
+                _audioSource.Play();
+            }
+        }
+        else
+        {
+            // Stop the rocket booster sound effect if we are not pressing the SPACE Key
+            _audioSource.Stop();
         }
 
     }
