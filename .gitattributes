@@ -7,77 +7,58 @@
 # Macro for all binary files that should use Git LFS.
 [attr]lfs -text filter=lfs diff=lfs merge=lfs
 
+## Unity ##
 
-# Unity Text Assets
-*.meta unityyaml
-*.unity unityyaml
-*.asset unityyaml
-*.prefab unityyaml
+*.cs diff=csharp text
+*.cginc text
+*.shader text
 
-# Unity Binary Assets
-*.cubemap lfs
-*.unitypackage lfs
-# Note: Unity terrain assets must have "-Terrain" suffix.
-*-[Tt]errain.asset -unityyaml lfs
-# Note: Unity navmesh assets must have "-NavMesh" suffix.
-*-[Nn]av[Mm]esh.asset -unityyaml lfs
+*.mat merge=unityyamlmerge eol=lf
+*.anim merge=unityyamlmerge eol=lf
+*.unity merge=unityyamlmerge eol=lf
+*.prefab merge=unityyamlmerge eol=lf
+*.physicsMaterial2D merge=unityyamlmerge eol=lf
+*.physicMaterial merge=unityyamlmerge eol=lf
+*.asset merge=unityyamlmerge eol=lf
+*.meta merge=unityyamlmerge eol=lf
+*.controller merge=unityyamlmerge eol=lf
 
-# Image
-*.psd lfs
-*.jpg lfs
-*.png lfs
-*.gif lfs
-*.bmp lfs
-*.tga lfs
-*.tiff lfs
-*.iff lfs
-*.pict lfs
-*.dds lfs
-*.xcf lfs
 
-# Audio formats
-*.mp3 lfs
-*.ogg lfs
-*.wav lfs
-*.aiff lfs
-*.aif lfs
-*.mod lfs
-*.it lfs
-*.s3m lfs
-*.xm lfs
+## git-lfs ##
 
-# Video formats
-*.mov lfs
-*.avi lfs
-*.asf lfs
-*.mpg lfs
-*.mpeg lfs
-*.mp4 lfs
+#Image
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.ai filter=lfs diff=lfs merge=lfs -text
 
-# 3D formats
-*.fbx lfs
-*.obj lfs
-*.max lfs
-*.blend lfs
-*.dae lfs
-*.mb lfs
-*.ma lfs
-*.3ds lfs
-*.dfx lfs
-*.c4d lfs
-*.lwo lfs
-*.lwo2 lfs
-*.abc lfs
-*.3dm lfs
+#Audio
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
 
-# Build
-*.dll lfs
-*.pdb lfs
-*.mdb lfs
+#Video
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
 
-# Packaging
-*.zip lfs
-*.7z lfs
-*.gz lfs
-*.rar lfs
-*.tar lfs
+#3D Object
+*.FBX filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+
+#ETC
+*.a filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.unitypackage filter=lfs diff=lfs merge=lfs -text
+*.aif filter=lfs diff=lfs merge=lfs -text
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.rns filter=lfs diff=lfs merge=lfs -text
+*.reason filter=lfs diff=lfs merge=lfs -text
+*.lxo filter=lfs diff=lfs merge=lfs -text
