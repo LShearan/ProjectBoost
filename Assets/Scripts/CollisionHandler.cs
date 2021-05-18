@@ -6,12 +6,14 @@ public class CollisionHandler : MonoBehaviour
     private AudioSource _audioSource;
     private Movement _movement;
 
-    private bool isTransitioning = false;
+    private bool _isTransitioning = false;
     
     [SerializeField] private float _delayOnCrash = 1f;
     [SerializeField] private float _delayOnFinish = 1f;
     [SerializeField] private AudioClip _deathAudioClip;
     [SerializeField] private AudioClip _successAudioClip;
+    [SerializeField] private ParticleSystem _successParticleSystem;
+    [SerializeField] private ParticleSystem _deathParticleSystem;
 
     private void Start()
     {
@@ -22,7 +24,7 @@ public class CollisionHandler : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // If we are currently transition dont process any other collisions
-        if (isTransitioning) { return; }
+        if (_isTransitioning) { return; }
 
         switch (other.gameObject.tag)
         {
@@ -47,13 +49,14 @@ public class CollisionHandler : MonoBehaviour
     private void StartCrashSequence(float delayAmount)
     {
         // Set isTransitioning to false so that when we crash we dont do anything else
-        isTransitioning = true;
+        _isTransitioning = true;
         
         // Play Death Sound Effect
         _audioSource.Stop();
         _audioSource.PlayOneShot(_deathAudioClip);
         
-        // todo add particle effect on crash
+        // Play Particle effect on crash
+        _deathParticleSystem.Play();
 
         // Disable movement component when we crash
         _movement.enabled = false;
@@ -66,11 +69,14 @@ public class CollisionHandler : MonoBehaviour
     private void StartFinishSequence(float delayAmount)
     {
         // Set isTransitioning to false so that when we succeed we dont do anything else
-        isTransitioning = true;
+        _isTransitioning = true;
 
         // Play Success Sound Effect
         _audioSource.Stop();
         _audioSource.PlayOneShot(_successAudioClip);
+        
+        // Play Particle effect on success
+        _successParticleSystem.Play();
         
         // Disable movement component when we reach the end of the level
         _movement.enabled = false;

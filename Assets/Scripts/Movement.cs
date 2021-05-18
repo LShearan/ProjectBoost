@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _thrustPower = 100f;
     [SerializeField] private float _rotationRate = 100f;
     [SerializeField] private AudioClip _thrusterAudioClip;
+    [SerializeField] private ParticleSystem[] _rocketBoosterParticleSystems;
     
     // Start is called before the first frame update
     private void Start()
@@ -37,11 +38,24 @@ public class Movement : MonoBehaviour
             {
                 _audioSource.PlayOneShot(_thrusterAudioClip);
             }
+            //Play some rocket booster particles only if they arent already playing
+            foreach (var particle in _rocketBoosterParticleSystems)
+            {
+                if (!particle.isPlaying)
+                {
+                    particle.Play();
+                }
+            }
         }
         else
         {
             // Stop the rocket booster sound effect if we are not pressing the SPACE Key
             _audioSource.Stop();
+            // Stop the rocker booster particle if we are not pressing the SPACE Key
+            foreach (var particle in _rocketBoosterParticleSystems)
+            {
+                particle.Stop();
+            }
         }
 
     }
